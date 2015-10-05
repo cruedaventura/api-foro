@@ -1,10 +1,12 @@
 package edu.upc.eetac.dsa.beeter.auth;
 
-import javax.management.relation.Role;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import edu.upc.eetac.dsa.beeter.entity.Role;
+
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
-
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserInfo implements Principal
 {
     private String name;

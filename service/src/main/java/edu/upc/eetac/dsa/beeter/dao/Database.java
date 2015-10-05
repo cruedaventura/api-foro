@@ -1,12 +1,13 @@
 package edu.upc.eetac.dsa.beeter.dao;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
-
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Database
 {
     private static Database instance = null;

@@ -1,5 +1,6 @@
 package edu.upc.eetac.dsa.beeter.dao;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import edu.upc.eetac.dsa.beeter.entity.Sting;
 import edu.upc.eetac.dsa.beeter.entity.StingCollection;
 
@@ -7,7 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class StingDAOImpl implements StingDAO
 {
     @Override

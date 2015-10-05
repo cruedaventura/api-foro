@@ -1,10 +1,12 @@
 package edu.upc.eetac.dsa.beeter;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-
+@JsonInclude(JsonInclude.Include.NON_NULL)
 /**
  * Root resource (exposed at "myresource" path)
  */
