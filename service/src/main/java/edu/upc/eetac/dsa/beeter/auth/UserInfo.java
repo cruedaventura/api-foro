@@ -21,7 +21,7 @@ public class UserInfo implements Principal
     @Override
     public String getName()
     {
-        return null;
+        return name;
     }
     public void setName(String name) {
         this.name = name;
