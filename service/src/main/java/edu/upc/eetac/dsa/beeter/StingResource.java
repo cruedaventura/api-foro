@@ -40,16 +40,15 @@ public class StingResource
 
     @GET
     @Produces(BeeterMediaType.BEETER_STING_COLLECTION)
-    public StingCollection getStings()
-    {
+    public StingCollection getStings(@QueryParam("timestamp") long timestamp, @DefaultValue("true") @QueryParam("before") boolean before) {
         StingCollection stingCollection = null;
-        StingDAO        stingDAO        = new StingDAOImpl();
+        StingDAO stingDAO = new StingDAOImpl();
         try {
-            stingCollection = stingDAO.getStings();
+            if (before && timestamp == 0) timestamp = System.currentTimeMillis();
+            stingCollection = stingDAO.getStings(timestamp, before);
         } catch (SQLException e) {
             throw new InternalServerErrorException();
         }
-
         return stingCollection;
     }
 
