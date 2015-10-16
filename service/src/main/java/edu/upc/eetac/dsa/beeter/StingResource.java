@@ -40,11 +40,14 @@ public class StingResource
 
     @GET
     @Produces(BeeterMediaType.BEETER_STING_COLLECTION)
-    public StingCollection getStings(@QueryParam("timestamp") long timestamp, @DefaultValue("true") @QueryParam("before") boolean before) {
+    public StingCollection getStings(@QueryParam("timestamp") long timestamp, @DefaultValue("true") @QueryParam("before") boolean before)
+    {
         StingCollection stingCollection = null;
         StingDAO stingDAO = new StingDAOImpl();
         try {
-            if (before && timestamp == 0) timestamp = System.currentTimeMillis();
+            if (before && timestamp == 0) {
+                timestamp = System.currentTimeMillis();
+            }
             stingCollection = stingDAO.getStings(timestamp, before);
         } catch (SQLException e) {
             throw new InternalServerErrorException();
@@ -55,15 +58,17 @@ public class StingResource
     @Path("/{id}")
     @GET
     @Produces(BeeterMediaType.BEETER_STING)
-    public Response getSting(@PathParam("id") String id, @Context Request request) {
+    public Response getSting(@PathParam("id") String id, @Context Request request)
+    {
         // Create cache-control
         CacheControl cacheControl = new CacheControl();
-        Sting sting = null;
-        StingDAO stingDAO = new StingDAOImpl();
+        Sting        sting        = null;
+        StingDAO     stingDAO     = new StingDAOImpl();
         try {
             sting = stingDAO.getStingById(id);
-            if (sting == null)
+            if (sting == null) {
                 throw new NotFoundException("Sting with id = " + id + " doesn't exist");
+            }
 
             // Calculate the ETag on last modified date of user resource
             EntityTag eTag = new EntityTag(Long.toString(sting.getLastModified()));

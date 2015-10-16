@@ -11,6 +11,7 @@ import org.glassfish.jersey.linking.InjectLinks;
 import javax.ws.rs.core.Link;
 import java.util.ArrayList;
 import java.util.List;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class StingCollection
 {
@@ -27,35 +28,43 @@ public class StingCollection
     private long oldestTimestamp;
     private List<Sting> stings = new ArrayList<>();
 
-    public List<Link> getLinks() {
+    public List<Link> getLinks()
+    {
         return links;
     }
 
-    public void setLinks(List<Link> links) {
+    public void setLinks(List<Link> links)
+    {
         this.links = links;
     }
 
-    public long getNewestTimestamp() {
+    public long getNewestTimestamp()
+    {
         return newestTimestamp;
     }
 
-    public void setNewestTimestamp(long newestTimestamp) {
+    public void setNewestTimestamp(long newestTimestamp)
+    {
         this.newestTimestamp = newestTimestamp;
     }
 
-    public long getOldestTimestamp() {
+    public long getOldestTimestamp()
+    {
         return oldestTimestamp;
     }
 
-    public void setOldestTimestamp(long oldestTimestamp) {
+    public void setOldestTimestamp(long oldestTimestamp)
+    {
         this.oldestTimestamp = oldestTimestamp;
     }
 
-    public List<Sting> getStings() {
+    public List<Sting> getStings()
+    {
         return stings;
     }
 
-    public void setStings(List<Sting> stings) {
+    public void setStings(List<Sting> stings)
+    {
         this.stings = stings;
     }
 }

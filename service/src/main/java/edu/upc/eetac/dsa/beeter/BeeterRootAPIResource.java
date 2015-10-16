@@ -9,7 +9,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 
 @Path("/")
-public class BeeterRootAPIResource {
+public class BeeterRootAPIResource
+{
     @Context
     private SecurityContext securityContext;
 
@@ -17,19 +18,23 @@ public class BeeterRootAPIResource {
 
     @GET
     @Produces(BeeterMediaType.BEETER_ROOT)
-    public BeeterRootAPI getRootAPI() {
-        if(securityContext.getUserPrincipal()!=null)
+    public BeeterRootAPI getRootAPI()
+    {
+        if (securityContext.getUserPrincipal() != null) {
             userid = securityContext.getUserPrincipal().getName();
+        }
         BeeterRootAPI beeterRootAPI = new BeeterRootAPI();
 
         return beeterRootAPI;
     }
 
-    public String getUserid() {
+    public String getUserid()
+    {
         return userid;
     }
 
-    public void setUserid(String userid) {
+    public void setUserid(String userid)
+    {
         this.userid = userid;
     }
 }
