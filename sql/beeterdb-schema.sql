@@ -31,8 +31,8 @@ CREATE TABLE stings (
     userid BINARY(16) NOT NULL,
     subject VARCHAR(100) NOT NULL,
     content VARCHAR(500) NOT NULL,
-    creation_timestamp TIMESTAMP NOT NULL,
-    last_modified datetime not null default current_timestamp,
+    last_modified TIMESTAMP NOT NULL,
+    creation_timestamp DATETIME not null default current_timestamp,
     FOREIGN KEY (userid) REFERENCES users(id) on delete cascade,
     PRIMARY KEY (id)
 );

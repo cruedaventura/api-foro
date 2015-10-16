@@ -94,4 +94,5 @@ public class UserResource
             throw new InternalServerErrorException();
         }
     }
+
 }
