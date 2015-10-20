@@ -10,7 +10,8 @@ import java.io.IOException;
 public class CORSResponseFilter implements ContainerResponseFilter
 {
     @Override
-    public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) throws IOException {
+    public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) throws IOException
+    {
         responseContext.getHeaders().add("Access-Control-Allow-Origin", "*");
         responseContext.getHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
         String reqHead = requestContext.getHeaderString("Access-Control-Request-Headers");
@@ -22,5 +23,5 @@ public class CORSResponseFilter implements ContainerResponseFilter
         responseContext.getHeaders().add("Access-Control-Expose-Headers", "Content-Type, Access-Control-Allow-Origin, Access-Control-Allow-Credentials, Location");
     }
 
-    }
 }
+
