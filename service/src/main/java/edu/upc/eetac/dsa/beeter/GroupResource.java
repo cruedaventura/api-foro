@@ -4,6 +4,7 @@ import edu.upc.eetac.dsa.beeter.dao.GroupDAO;
 import edu.upc.eetac.dsa.beeter.dao.GroupDAOImpl;
 import edu.upc.eetac.dsa.beeter.entity.AuthToken;
 import edu.upc.eetac.dsa.beeter.entity.Group;
+import edu.upc.eetac.dsa.beeter.entity.GroupCollection;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
@@ -34,8 +35,23 @@ public class GroupResource
             throw new InternalServerErrorException();
         }
 
-       URI uri = new URI(uriInfo.getAbsolutePath().toString() + "/" + group.getId());
-     
-       return Response.created(uri).type(BeeterMediaType.BEETER_GROUP).entity(group).build();
+        URI uri = new URI(uriInfo.getAbsolutePath().toString() + "/" + group.getId());
+
+        return Response.created(uri).type(BeeterMediaType.BEETER_GROUP).entity(group).build();
     }
+
+    @GET
+    @Produces(BeeterMediaType.BEETER_GROUP_COLLECTION)
+    public GroupCollection getGroup()
+    {
+        GroupCollection groupCollection = null;
+        GroupDAO        groupDAO        = new GroupDAOImpl();
+        try {
+            groupCollection = groupDAO.getGroups();
+        } catch (SQLException e) {
+            throw new InternalServerErrorException();
+        }
+        return groupCollection;
+    }
+
 }

@@ -1,11 +1,14 @@
 package edu.upc.eetac.dsa.beeter.dao;
 
 import edu.upc.eetac.dsa.beeter.entity.Group;
+import edu.upc.eetac.dsa.beeter.entity.GroupCollection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GroupDAOImpl implements GroupDAO
 {
@@ -79,9 +82,28 @@ public class GroupDAOImpl implements GroupDAO
     }
 
     @Override
-    public Group getGroup(long timestamp, boolean before) throws SQLException
+    public GroupCollection getGroups() throws SQLException
     {
-        return null;
+
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        try {
+            connection = Database.getConnection();
+
+             stmt = connection.prepareStatement(GroupDAOQuery.GET_GROUP);
+
+            ResultSet rs = stmt.executeQuery();
+            List<Group> groups = new ArrayList<>();
+            while (rs.next()) {
+                    groups.add( new Group(rs.getString("id"), rs.getString("userid"), rs.getString("name")));
+            }
+            return new GroupCollection(groups);
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
     }
 
     @Override
