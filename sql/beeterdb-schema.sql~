@@ -14,7 +14,7 @@ CREATE TABLE users (
 
 CREATE TABLE user_roles (
     userid BINARY(16) NOT NULL,
-    role ENUM ('registered'),
+    role ENUM ('registered','admin'),
     FOREIGN KEY (userid) REFERENCES users(id) on delete cascade,
     PRIMARY KEY (userid, role)
 );
@@ -29,10 +29,34 @@ CREATE TABLE auth_tokens (
 CREATE TABLE stings (
     id BINARY(16) NOT NULL,
     userid BINARY(16) NOT NULL,
+    groupid BINARY(16) NOT NULL, 
     subject VARCHAR(100) NOT NULL,
-    content VARCHAR(500) NOT NULL,
-    creation_timestamp TIMESTAMP NOT NULL,
-    last_modified datetime not null default current_timestamp,
+    content text NOT NULL,
+    last_modified TIMESTAMP NOT NULL,
+    creation_timestamp DATETIME not null default current_timestamp,
     FOREIGN KEY (userid) REFERENCES users(id) on delete cascade,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE groups (
+    id BINARY(16) NOT NULL,
+    userid BINARY(16) NOT NULL UNIQUE,
+    name VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE group_users (
+    userid BINARY(16) NOT NULL UNIQUE,
+    groupid BINARY(16) NOT NULL UNIQUE,
+    joined_at TIMESTAMP NOT NULL,
+    PRIMARY KEY (userid,groupid)
+);
+
+CREATE TABLE replies (
+    id BINARY(16) NOT NULL UNIQUE,
+    stingid BINARY(16) NOT NULL UNIQUE,
+    userid BINARY(16) NOT NULL UNIQUE,
+    content text NOT NULL,
+    created_at TIMESTAMP NOT NULL default current_timestamp,
     PRIMARY KEY (id)
 );
