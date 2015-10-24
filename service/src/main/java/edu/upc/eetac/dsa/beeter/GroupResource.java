@@ -20,7 +20,7 @@ public class GroupResource
 
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces(BeeterMediaType.BEETER_STING)
+    @Produces(BeeterMediaType.BEETER_GROUP)
     public Response createGroup(@FormParam("name") String name, @Context UriInfo uriInfo) throws URISyntaxException
     {
         if (name == null) {
@@ -53,5 +53,22 @@ public class GroupResource
         }
         return groupCollection;
     }
-
+    @Path("/{id}")
+    @DELETE
+    public void deleteGroup(@PathParam("id") String id)
+    {
+        String   userid   = securityContext.getUserPrincipal().getName();
+        GroupDAO groupDAO = new GroupDAOImpl();
+        try {
+            String ownerid = groupDAO.getGroupById(id).getUserid();
+            if (!userid.equals(ownerid)) {
+                throw new ForbiddenException("operation not allowed");
+            }
+            if (!groupDAO.deleteGroup(id)) {
+                throw new NotFoundException("Group with id = " + id + " doesn't exist");
+            }
+        } catch (SQLException e) {
+            throw new InternalServerErrorException();
+        }
+    }
 }

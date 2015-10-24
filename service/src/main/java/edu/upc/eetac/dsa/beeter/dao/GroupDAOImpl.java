@@ -115,6 +115,52 @@ public class GroupDAOImpl implements GroupDAO
     @Override
     public boolean deleteGroup(String id) throws SQLException
     {
-        return false;
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        try {
+            connection = Database.getConnection();
+
+            stmt = connection.prepareStatement(GroupDAOQuery.DELETE_GROUP);
+            stmt.setString(1, id);
+
+            int rows = stmt.executeUpdate();
+            return (rows == 1);
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
     }
+    @Override
+    public void joinGroup(String userid, String groupid) throws SQLException
+    {
+        Connection        connection = null;
+        PreparedStatement stmt       = null;
+        String            id    = null;
+        try {
+            connection = Database.getConnection();
+
+            stmt = connection.prepareStatement(UserDAOImpl.UserDAOQuery.UUID);
+
+            stmt = connection.prepareStatement(GroupDAOQuery.JOIN_GROUP);
+            stmt.setString(1, userid);
+            stmt.setString(2, groupid);
+
+            System.out.println(stmt.toString());
+
+            stmt.executeUpdate();
+        } catch (SQLException exception) {
+            throw exception;
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (connection != null) {
+                connection.setAutoCommit(true);
+                connection.close();
+            }
+        }
+    }
+
 }

@@ -40,7 +40,7 @@ CREATE TABLE stings (
 
 CREATE TABLE groups (
     id BINARY(16) NOT NULL,
-    userid BINARY(16) NOT NULL UNIQUE,
+    userid BINARY(16) NOT NULL,
     name VARCHAR(255) NOT NULL,
     PRIMARY KEY (id)
 );
@@ -48,7 +48,7 @@ CREATE TABLE groups (
 CREATE TABLE group_users (
     userid BINARY(16) NOT NULL UNIQUE,
     groupid BINARY(16) NOT NULL UNIQUE,
-    joined_at TIMESTAMP NOT NULL,
+    joined_at TIMESTAMP NOT NULL default current_timestamp,
     PRIMARY KEY (userid,groupid)
 );
 

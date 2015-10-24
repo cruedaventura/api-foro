@@ -10,6 +10,7 @@ public interface GroupDAO
     public Group createGroup(String userid, String name) throws SQLException;
     public Group getGroupById(String id) throws SQLException;
     public GroupCollection getGroups() throws SQLException;
+    public void joinGroup(String userid, String groupid) throws SQLException;
     public Group updateGroup(String id, String subject, String content) throws SQLException;
     public boolean deleteGroup(String id) throws SQLException;
 }
