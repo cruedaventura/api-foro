@@ -8,7 +8,7 @@ import java.sql.*;
 public class StingDAOImpl implements StingDAO
 {
     @Override
-    public Sting createSting(String userid, String subject, String content) throws SQLException
+    public Sting createSting(String userid, String groupid ,String subject, String content) throws SQLException
     {
         Connection connection = null;
         PreparedStatement stmt = null;
@@ -26,8 +26,9 @@ public class StingDAOImpl implements StingDAO
             stmt = connection.prepareStatement(StingDAOQuery.CREATE_STING);
             stmt.setString(1, id);
             stmt.setString(2, userid);
-            stmt.setString(3, subject);
-            stmt.setString(4, content);
+            stmt.setString(3, groupid);
+            stmt.setString(4, subject);
+            stmt.setString(5, content);
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw e;
@@ -59,7 +60,7 @@ public class StingDAOImpl implements StingDAO
                 sting = new Sting();
                 sting.setId(rs.getString("id"));
                 sting.setUserid(rs.getString("userid"));
-                sting.setCreator(rs.getString("fullname"));
+                sting.setGroupid(rs.getString("Groupid"));
                 sting.setSubject(rs.getString("subject"));
                 sting.setContent(rs.getString("content"));
                 sting.setCreationTimestamp(rs.getTimestamp("creation_timestamp").getTime());
@@ -73,6 +74,39 @@ public class StingDAOImpl implements StingDAO
         }
         return sting;
     }
+
+    /*@Override
+    public Sting getStingbyGroupid(String id) throws SQLException
+    {
+        Sting sting = null;
+
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        try {
+            connection = Database.getConnection();
+
+            stmt = connection.prepareStatement(StingDAOQuery.GET_STING_BY_GROUPID);
+            stmt.setString(1, id);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                sting = new Sting();
+                sting.setId(rs.getString("id"));
+                sting.setUserid(rs.getString("userid"));
+                sting.setGroupid(rs.getString("Groupid"));
+                sting.setSubject(rs.getString("subject"));
+                sting.setContent(rs.getString("content"));
+                sting.setCreationTimestamp(rs.getTimestamp("creation_timestamp").getTime());
+                sting.setLastModified(rs.getTimestamp("last_modified").getTime());
+            }
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (stmt != null) stmt.close();
+            if (connection != null) connection.close();
+        }
+        return sting;
+    }*/
 
     @Override
     public StingCollection getStings(long timestamp, boolean before) throws SQLException {
@@ -95,6 +129,7 @@ public class StingDAOImpl implements StingDAO
                 Sting sting = new Sting();
                 sting.setId(rs.getString("id"));
                 sting.setUserid(rs.getString("userid"));
+                sting.setGroupid(rs.getString("groupid"));
                 sting.setSubject(rs.getString("subject"));
                 sting.setCreationTimestamp(rs.getTimestamp("creation_timestamp").getTime());
                 sting.setLastModified(rs.getTimestamp("last_modified").getTime());
@@ -113,6 +148,7 @@ public class StingDAOImpl implements StingDAO
         }
         return stingCollection;
     }
+
 
     @Override
     public Sting updateSting(String id, String subject, String content) throws SQLException

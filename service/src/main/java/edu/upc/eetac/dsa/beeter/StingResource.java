@@ -12,16 +12,16 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
 
-@Path("stings")
+@Path("/group/stings")
 public class StingResource
 {
     @Context
     private SecurityContext securityContext;
-
+    @Path("/{id}")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(BeeterMediaType.BEETER_STING)
-    public Response createSting(@FormParam("subject") String subject, @FormParam("content") String content, @Context UriInfo uriInfo) throws URISyntaxException
+    public Response createSting(@PathParam("id") String id, @FormParam("subject") String subject, @FormParam("content") String content, @Context UriInfo uriInfo) throws URISyntaxException
     {
         if (subject == null || content == null) {
             throw new BadRequestException("all parameters are mandatory");
@@ -30,13 +30,14 @@ public class StingResource
         Sting     sting               = null;
         AuthToken authenticationToken = null;
         try {
-            sting = stingDAO.createSting(securityContext.getUserPrincipal().getName(), subject, content);
+            sting = stingDAO.createSting(securityContext.getUserPrincipal().getName(), id, subject, content);
         } catch (SQLException e) {
             throw new InternalServerErrorException();
         }
         URI uri = new URI(uriInfo.getAbsolutePath().toString() + "/" + sting.getId());
         return Response.created(uri).type(BeeterMediaType.BEETER_STING).entity(sting).build();
     }
+
 
     @GET
     @Produces(BeeterMediaType.BEETER_STING_COLLECTION)
@@ -91,6 +92,44 @@ public class StingResource
             throw new InternalServerErrorException();
         }
     }
+
+    /*@Path("/{id}")
+    @GET
+    @Produces(BeeterMediaType.BEETER_STING)
+    public Response getStingbyGroupid(@PathParam("id") String id, @Context Request request)
+    {
+        // Create cache-control
+        CacheControl cacheControl = new CacheControl();
+        Sting        sting        = null;
+        StingDAO     stingDAO     = new StingDAOImpl();
+        try {
+            sting = stingDAO.getStingbyGroupid(id);
+            if (sting == null) {
+                throw new NotFoundException("Sting by groupid with id = " + id + " doesn't exist");
+            }
+
+            // Calculate the ETag on last modified date of user resource
+            EntityTag eTag = new EntityTag(Long.toString(sting.getLastModified()));
+
+            // Verify if it matched with etag available in http request
+            Response.ResponseBuilder rb = request.evaluatePreconditions(eTag);
+
+            // If ETag matches the rb will be non-null;
+            // Use the rb to return the response without any further processing
+            if (rb != null) {
+                return rb.cacheControl(cacheControl).tag(eTag).build();
+            }
+
+            // If rb is null then either it is first time request; or resource is
+            // modified
+            // Get the updated representation and return with Etag attached to it
+            rb = Response.ok(sting).cacheControl(cacheControl).tag(eTag);
+            return rb.build();
+        } catch (SQLException e) {
+            throw new InternalServerErrorException();
+        }
+    }*/
+
 
     @Path("/{id}")
     @PUT
