@@ -21,7 +21,7 @@ public class JointGroupResource
     @Path("/{id}")
     @POST
     @Produces(BeeterMediaType.BEETER_GROUP)
-    public Response joinGroup(@PathParam("id") String id, @Context UriInfo uriInfo) throws URISyntaxException
+    public Response joinGroup(@PathParam("id") String id, @Context UriInfo uriInfo) throws URISyntaxException, SQLException
     {
         if (id == null) {
             throw new BadRequestException("all parameters are mandatory");
