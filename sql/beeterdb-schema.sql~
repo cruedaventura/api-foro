@@ -46,16 +46,16 @@ CREATE TABLE groups (
 );
 
 CREATE TABLE group_users (
-    userid BINARY(16) NOT NULL UNIQUE,
-    groupid BINARY(16) NOT NULL UNIQUE,
+    userid BINARY(16) NOT NULL,
+    groupid BINARY(16) NOT NULL,
     joined_at TIMESTAMP NOT NULL default current_timestamp,
     PRIMARY KEY (userid,groupid)
 );
 
 CREATE TABLE replies (
-    id BINARY(16) NOT NULL UNIQUE,
-    stingid BINARY(16) NOT NULL UNIQUE,
-    userid BINARY(16) NOT NULL UNIQUE,
+    id BINARY(16) NOT NULL,
+    stingid BINARY(16) NOT NULL,
+    userid BINARY(16) NOT NULL,
     content text NOT NULL,
     created_at TIMESTAMP NOT NULL default current_timestamp,
     PRIMARY KEY (id)

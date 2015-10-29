@@ -1,7 +1,9 @@
 package edu.upc.eetac.dsa.beeter.dao;
 
+import edu.upc.eetac.dsa.beeter.Exceptions.UserHasNoPermissionsException;
 import edu.upc.eetac.dsa.beeter.entity.Group;
 import edu.upc.eetac.dsa.beeter.entity.GroupCollection;
+import edu.upc.eetac.dsa.beeter.entity.Role;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,7 +15,7 @@ import java.util.List;
 public class GroupDAOImpl implements GroupDAO
 {
     @Override
-    public Group createGroup(String userid, String name) throws SQLException
+    public Group createGroup(String userid, String name) throws SQLException, UserHasNoPermissionsException
     {
         Connection        connection = null;
         PreparedStatement stmt       = null;
@@ -29,14 +31,17 @@ public class GroupDAOImpl implements GroupDAO
                 throw new SQLException();
             }
 
-            stmt = connection.prepareStatement(GroupDAOQuery.CREATE_GROUP);
-            stmt.setString(1, groupid);
-            stmt.setString(2, userid);
-            stmt.setString(3, name);
 
-            System.out.println(stmt.toString());
+            if (this.userHasPermissions(userid, Role.admin)) {
+                stmt = connection.prepareStatement(GroupDAOQuery.CREATE_GROUP);
+                stmt.setString(1, groupid);
+                stmt.setString(2, userid);
+                stmt.setString(3, name);
 
-            stmt.executeUpdate();
+                stmt.executeUpdate();
+            } else {
+                throw new UserHasNoPermissionsException(userid);
+            }
         } catch (SQLException exception) {
             throw exception;
         } finally {
@@ -49,6 +54,38 @@ public class GroupDAOImpl implements GroupDAO
             }
         }
         return this.getGroupById(groupid);
+    }
+
+    private boolean userHasPermissions(String userid, Role supposedRoleToHave) throws SQLException
+    {
+        Connection        connection = null;
+        PreparedStatement stmt       = null;
+        String userRole = "";
+
+        try {
+            connection = Database.getConnection();
+
+            stmt = connection.prepareStatement(UserDAOQuery.GET_ROLE_BY_USER);
+            stmt.setString(1, userid);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                userRole = rs.getString("role");
+            }
+
+        } catch (SQLException exception) {
+            throw exception;
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (connection != null) {
+                connection.setAutoCommit(true);
+                connection.close();
+            }
+        }
+
+        return userRole.equals(supposedRoleToHave.toString());
     }
 
     @Override

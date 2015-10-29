@@ -1,5 +1,6 @@
 package edu.upc.eetac.dsa.beeter;
 
+import edu.upc.eetac.dsa.beeter.Exceptions.UserHasNoPermissionsException;
 import edu.upc.eetac.dsa.beeter.dao.GroupDAO;
 import edu.upc.eetac.dsa.beeter.dao.GroupDAOImpl;
 import edu.upc.eetac.dsa.beeter.entity.AuthToken;
@@ -33,6 +34,9 @@ public class GroupResource
             group = groupDAO.createGroup(this.securityContext.getUserPrincipal().getName(), name);
         } catch (SQLException e) {
             throw new InternalServerErrorException();
+        } catch (UserHasNoPermissionsException exception) {
+            throw new BadRequestException("No eres el admin");
+            //return Response.status(401).build();
         }
 
         URI uri = new URI(uriInfo.getAbsolutePath().toString() + "/" + group.getId());

@@ -19,4 +19,28 @@ public class Reply
         this.text = text;
     }
 
+    public String getId()
+    {
+        return id;
+    }
+
+    public String getStingid()
+    {
+        return stingid;
+    }
+
+    public String getUserid()
+    {
+        return userid;
+    }
+
+    public String getText()
+    {
+        return text;
+    }
+
+    public long getCreated_at()
+    {
+        return created_at;
+    }
 }
